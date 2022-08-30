@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <title>Document</title>
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap');
+  body {
+    overflow: hidden;
+  }
+</style>
+<body style="margin: 0; padding: 0;">
+    <div id="root"></div>
+</body>
+<script type="module">
+import {createElement, useState} from "https://cdn.skypack.dev/react";
+import {render} from "https://cdn.skypack.dev/react-dom";
+import {motion} from "https://cdn.skypack.dev/framer-motion@6.0";
+
+function randomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min + 1;
+}
+export function Klik() {
+  const [score, setScore] = useState(0);
+  const [unlocked, setUnocked] = useState(true);
+  const [y, setY] = useState(100);
+  const [x, setX] = useState(-10);
+  return jsx("div", {
+    children: [
+      jsx(motion.img, {
+        animate: { scale: 0.25, x: `${x}vw`, y: [`${y}vh`, "100vh"] },
+        transition: { duration: 0.4 },
+        src: "https://bun.sh/logo-square.png"
+      }, undefined, false, undefined, this),
+      jsx("div", {
+        style: {
+          display: "grid",
+          alignContent: "center",
+          justifyContent: "center",
+          height: "100vh",
+          textAlign: "center",
+          position: "absolute",
+          width: "100vw",
+          top: 0
+        },
+        children: [
+          jsx("p", {
+            style: { fontFamily: "Ubuntu", fontSize: 50 },
+            children: score
+          }, undefined, false, undefined, this),
+          jsx(motion.img, {
+            whileHover: { scale: 1.25 },
+            whileTap: { scale: 1 },
+            transition: { duration: 0.15 },
+            onClick: () => {
+              if (unlocked)
+                setY(100);
+              setScore(score + 1);
+              if ((score + 1) % 10 == 0 && unlocked) {
+                setUnocked(false);
+                setY(0);
+                setTimeout(() => {
+                  setUnocked(true);
+                  setX(randomNumber(-10, 85));
+                }, 400);
+              }
+            },
+            src: "./buchta.png"
+          }, undefined, false, undefined, this)
+        ]
+      }, undefined, true, undefined, this)
+    ]
+  }, undefined, true, undefined, this);
+}
+
+
+function App() {
+  return jsx(Klik, {}, undefined, false, undefined, this);
+}
+render(jsx(App, {}, undefined, false, undefined, this), document.getElementById("root"));
+function jsx(name, data, _g1, _g2, _g3, _g4) { return createElement(name, data); }
+</script>
+</html>
